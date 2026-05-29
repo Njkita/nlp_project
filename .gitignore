@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+out/
+outputs/
+models/
+RuOpinionNE-2024/
+env.sh
+data/sft_train.jsonl
+*.safetensors
+report/*.aux
+report/*.log
+report/*.out
