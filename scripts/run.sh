@@ -9,6 +9,9 @@ MODEL=${MODEL:-$HOME/models/T-pro-it-2.0}
 VAL=RuOpinionNE-2024/validation_labeled.jsonl
 mkdir -p data outputs out
 
+# format/parser round-trip on the gold (should be ~0.999)
+python3 tests/roundtrip.py "$VAL"
+
 # Table 1: dataset statistics
 python3 -m ruopin.stats RuOpinionNE-2024/train.jsonl "$VAL"
 
