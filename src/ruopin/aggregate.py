@@ -1,4 +1,4 @@
-import os, json, argparse, math
+import os, json, argparse
 from collections import defaultdict
 from .serialize import _extract_json_array, _norm_polarity, parse_output
 from .score import load_jsonl, score
@@ -69,6 +69,7 @@ def main():
         args.min_votes = best[1]
 
     preds = build_preds(gen, args.min_votes)
+    os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
     with open(args.out, "w", encoding="utf-8") as f:
         for p in preds:
             f.write(json.dumps(p, ensure_ascii=False) + "\n")

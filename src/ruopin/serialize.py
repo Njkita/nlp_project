@@ -72,10 +72,7 @@ def _make_spanfield(text, value):
     return [texts, offs]
 
 
-_POLARITY_MAP = {
-    "POS": "POS", "POSITIVE": "POS", "ПОЗ": "POS", "ПОЛОЖИТЕЛЬНАЯ": "POS", "POZ": "POS",
-    "NEG": "NEG", "NEGATIVE": "NEG", "НЕГ": "NEG", "ОТРИЦАТЕЛЬНАЯ": "NEG",
-}
+_POLARITY_MAP = {"POS": "POS", "POSITIVE": "POS", "NEG": "NEG", "NEGATIVE": "NEG"}
 
 
 def _norm_polarity(p):

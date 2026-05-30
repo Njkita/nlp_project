@@ -1,6 +1,7 @@
+import os
 import json
 import argparse
-from .prompts import build_train_messages, build_messages
+from .prompts import build_train_messages
 from .score import load_jsonl
 
 
@@ -15,6 +16,7 @@ def main():
     if args.extra:
         rows += load_jsonl(args.extra)
 
+    os.makedirs(os.path.dirname(args.out_train) or ".", exist_ok=True)
     with open(args.out_train, "w", encoding="utf-8") as f:
         for s in rows:
             f.write(json.dumps({"messages": build_train_messages(s)}, ensure_ascii=False) + "\n")
