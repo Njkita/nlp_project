@@ -1,0 +1,7 @@
+=== EVAL checkpoint-160 (greedy base+LoRA) ===
+F1 checkpoint-160: final f1 (min_votes=1): 0.3947
+=== EVAL checkpoint-320 (greedy base+LoRA) ===
+F1 checkpoint-320: final f1 (min_votes=1): 0.4349
+=== EVAL checkpoint-480 (greedy base+LoRA) ===
+F1 checkpoint-480: final f1 (min_votes=1): 0.4378
+EVAL_EPOCHS_DONE

@@ -1,0 +1,17 @@
+=== SELF-CONSISTENCY epoch3 (N=5, temp0.6) ===
+wrote generations -> outputs/sc480.jsonl
+--- SC sweep ---
+min_votes=1: f1=0.4350
+min_votes=2: f1=0.4603
+min_votes=3: f1=0.4346
+min_votes=4: f1=0.3714
+min_votes=5: f1=0.2985
+best min_votes=2 f1=0.4603
+final f1 (min_votes=2): 0.4603
+=== BASELINE zero-shot ===
+wrote generations -> outputs/zs.jsonl
+F1 zero-shot: final f1 (min_votes=1): 0.1911
+=== BASELINE few-shot(3) ===
+wrote generations -> outputs/fs.jsonl
+F1 few-shot: final f1 (min_votes=1): 0.1990
+EVAL_FINAL_DONE

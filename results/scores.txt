@@ -1,0 +1,6 @@
+zs_pred.jsonl                F1=0.1911   zero-shot
+fs_pred.jsonl                F1=0.1990   few-shot (3)
+checkpoint-160_pred.jsonl    F1=0.3947   epoch 1, greedy
+checkpoint-320_pred.jsonl    F1=0.4349   epoch 2, greedy
+checkpoint-480_pred.jsonl    F1=0.4378   epoch 3, greedy
+sc480_pred.jsonl             F1=0.4603   epoch 3, self-consistency (min_votes=2)
