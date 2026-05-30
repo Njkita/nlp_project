@@ -39,6 +39,10 @@ done
 BEST=$(ls -d out/tpro-lora/checkpoint-* | sort -t- -k2 -n | tail -1)
 python3 -m ruopin.infer_vllm --model "$MODEL" --lora "$BEST" --data "$VAL" --out outputs/sc.jsonl --samples 5 --temperature 0.6 --quant bitsandbytes
 python3 -m ruopin.aggregate --gen outputs/sc.jsonl --out outputs/sc_pred.jsonl --gold "$VAL" --sweep
+# same samples, voting by token-overlap clustering (RESULTS.md comparison)
+python3 -m ruopin.aggregate --gen outputs/sc.jsonl --out outputs/sc_overlap_pred.jsonl --gold "$VAL" --match overlap --sweep
 
 # error breakdown on the best prediction
 python3 -m ruopin.error_analysis --gold "$VAL" --pred outputs/sc_pred.jsonl
+# how often the parser dropped or relocated spans from the raw model output
+python3 -m ruopin.parse_diag --gen outputs/sc.jsonl
