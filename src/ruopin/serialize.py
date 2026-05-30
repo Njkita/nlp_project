@@ -41,18 +41,24 @@ def _find_offset(text, span, cursor):
     return pos, pos + len(span)
 
 
-def _make_source(text, holder):
+def _bump(stats, key):
+    if stats is not None:
+        stats[key] = stats.get(key, 0) + 1
+
+
+def _make_source(text, holder, stats=None):
     if holder == AUTHOR:
         return [[AUTHOR], [NULL]]
     if holder in (NULL, "", None):
         return [[NULL], ["0:0"]]
     off = _find_offset(text, holder, 0)
     if off is None:
+        _bump(stats, "holder_not_found")
         return [[NULL], ["0:0"]]
     return [[holder], [f"{off[0]}:{off[1]}"]]
 
 
-def _make_spanfield(text, value):
+def _make_spanfield(text, value, stats=None, field=None):
     if isinstance(value, str):
         value = [value]
     texts, offs = [], []
@@ -63,11 +69,13 @@ def _make_spanfield(text, value):
             continue
         off = _find_offset(text, frag, cursor)
         if off is None:
+            _bump(stats, f"{field}_frag_not_found")
             continue
         texts.append(frag)
         offs.append(f"{off[0]}:{off[1]}")
         cursor = off[1]
     if not texts:
+        _bump(stats, f"{field}_not_found")
         return None
     return [texts, offs]
 
@@ -133,7 +141,7 @@ def sanitize(text, opinions):
     return kept
 
 
-def parse_output(text, output_str):
+def parse_output(text, output_str, stats=None):
     items = _extract_json_array(output_str)
     if not items:
         return []
@@ -143,16 +151,20 @@ def parse_output(text, output_str):
             continue
         pol = _norm_polarity(it.get("polarity"))
         if pol is None:
+            _bump(stats, "polarity_bad")
             continue
-        target = _make_spanfield(text, it.get("target", ""))
-        expr = _make_spanfield(text, it.get("expression", ""))
+        target = _make_spanfield(text, it.get("target", ""), stats, "target")
+        expr = _make_spanfield(text, it.get("expression", ""), stats, "expression")
         if target is None or expr is None:
             continue
-        source = _make_source(text, it.get("holder", NULL))
+        source = _make_source(text, it.get("holder", NULL), stats)
         opinions.append({
             "Source": source,
             "Target": target,
             "Polar_expression": expr,
             "Polarity": pol,
         })
-    return sanitize(text, opinions)
+    kept = sanitize(text, opinions)
+    if stats is not None and len(kept) < len(opinions):
+        stats["dropped_by_sanitize"] = stats.get("dropped_by_sanitize", 0) + (len(opinions) - len(kept))
+    return kept
